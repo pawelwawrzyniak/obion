@@ -1,0 +1,25 @@
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: minimal-ingress
+#   annotations:
+#     nginx.ingress.kubernetes.io/rewrite-target: /
+# spec:
+#   ingressClassName: nginx-example
+#   rules:
+#   - http:
+#       paths:
+#       - path: /
+#         pathType: Prefix
+#         backend:
+#           service:
+#             name: voting-app
+#             port:
+#               number: 5000
+#       - path: /test
+#         pathType: ImplementationSpecific
+#         backend:
+#           service:
+#             name: result-app
+#             port:
+#               number: 5001

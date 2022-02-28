@@ -1,0 +1,62 @@
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: standard
+provisioner: kubernetes.io/aws-ebs
+parameters:
+  type: gp3
+reclaimPolicy: Retain
+allowVolumeExpansion: true
+mountOptions:
+  - debug
+volumeBindingMode: Immediate
+# ---
+# apiVersion: v1
+# kind: PersistentVolume
+# metadata:
+#   name: redis-data
+# spec:
+#   capacity:
+#     storage: 10Gi
+#   accessModes:
+#     - ReadWriteOnce
+#   persistentVolumeReclaimPolicy: Recycle
+#   storageClassName: standard
+#   volumeMode: Filesystem
+
+  # claimRef:
+  #   name: foo-pvc
+  #   namespace: foo
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: redis-data-pvc
+  # namespace: foo
+spec:
+  storageClassName: "standard" # Empty string must be explicitly set otherwise default StorageClass will be set
+  volumeName: redis-data
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: persistent-volume-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  selector:
+    matchLabels:
+      pv: local
+  storageClassName: standard
+  # storageClassName: hostpath

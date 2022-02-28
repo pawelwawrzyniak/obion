@@ -1,0 +1,2 @@
+1. Check if the pods are running by:
+kubectl get pods --namespace {{ .Release.Namespace }} -l app={{ .Values.name }}
